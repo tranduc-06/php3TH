@@ -1,36 +1,38 @@
-<form method="POST">
-<textarea name="content">
 <?php
-    if (isset($_POST['content'])) {
-        echo $_POST['content'];
-    }
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "testt";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+} 
+
+// $sql = "INSERT INTO persons (last_name, first_name, age, address)
+// VALUES ('John', 'Doe', '18','Ha Noi')";
+
+// if ($conn->query($sql) === TRUE) {
+//   echo "New record created successfully";
+// } else {
+//   echo "Error: " . $sql . "<br>" . $conn->error;
+// }
+
+// $conn->close();
+
+$sql = "SELECT id, first_name, last_name FROM persons";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+    echo "id: " . $row["id"]. " - Name: " . $row["first_name"]. " " . $row["last_name"]. "<br>";
+  }
+} else {
+  echo "0 results";
+}
+$conn->close();
 ?>
-</textarea>
-<input type="submit" name="Convert">
-</form>
 
-<textarea>
-<?php
-    function convertPhp($input) {
-        $a = strpos($input,'$');
-        $b = strpos($input,'_');
-        $char = substr($input, $a, 2);
-        $char1 = substr($input, $b, 2);
-        $low = str_replace($char, strtolower($char), $input);
-        $low1 = str_replace($char1, strtolower($char1), $low);
-        
-        $c = str_replace( '=', ' = ', $low1);
-        $d = str_replace( '_', '', $c );
-
-        $BehindEqual = str_replace( 'array(', '[', $d);
-        $BehindEqual1 = str_replace( ')', ']', $BehindEqual);
-
-
-        return $BehindEqual1;
-    }
-
-    if (isset($_POST['content'])) {
-        echo convertPhp($_POST['content']);
-    }
-?>
-</textarea>
